@@ -1,42 +1,118 @@
 package com.awords.textkmpanalyzer;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import com.awords.textkmpanalyzer.algorithm.KMPAlgorithm;
 import com.awords.textkmpanalyzer.io.FileService;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class TextAnalyzerController {
 
-    // 依赖注入或直接实例化
     private final KMPAlgorithm kmpAlgorithm = new KMPAlgorithm();
     private final FileService fileService = new FileService();
 
     @FXML
-    private TextArea inputTextArea; // 对应FXML中的文本输入区域
-
+    private TextField contentField;
     @FXML
-    private TextField keywordField; // 对应FXML中的关键词输入框
-
+    private TextField filenameField;
     @FXML
-    private Label resultLabel; // 用于显示结果
+    private TextField keywordField;
+    @FXML
+    private TextArea resultArea;
 
     @FXML
     protected void onSaveButtonClick() {
-        // TODO: Partner - 调用 fileService.saveTextToFile()
-        // 1. 获取 inputTextArea 的内容
-        // 2. 弹出文件选择器或指定文件名
-        // 3. 保存文件
+        String content = contentField.getText();
+        String filename = filenameField.getText();
+
+        if (content == null || content.trim().isEmpty()) {
+            log("Error: Content cannot be empty.");
+            return;
+        }
+        // Requirement: Single line string, no spaces.
+        if (content.contains(" ")) {
+             log("Warning: Content contains spaces. Requirement specifies no spaces.");
+        }
+        if (filename == null || filename.trim().isEmpty()) {
+            log("Error: Filename cannot be empty.");
+            return;
+        }
+
+        try {
+            File file = new File(filename);
+            fileService.saveTextToFile(file, content);
+            log("Success: Content saved to " + file.getAbsolutePath());
+        } catch (IOException e) {
+            log("Error saving file: " + e.getMessage());
+        }
     }
 
     @FXML
-    protected void onSearchButtonClick() {
-        // TODO: Partner - 调用 kmpAlgorithm 进行搜索
-        // 1. 获取 keywordField 的内容
-        // 2. 读取文件内容 (或者直接使用 inputTextArea 的内容，根据需求)
-        // 3. 调用 kmpAlgorithm.countOccurrences() 和 findIndices()
-        // 4. 更新 resultLabel 显示结果
+    protected void onCountButtonClick() {
+        String filename = filenameField.getText();
+        String keyword = keywordField.getText();
+
+        if (filename == null || filename.trim().isEmpty()) {
+            log("Error: Please specify the filename to read from (in the Filename field).");
+            return;
+        }
+        if (keyword == null || keyword.isEmpty()) {
+            log("Error: Keyword cannot be empty.");
+            return;
+        }
+
+        try {
+            File file = new File(filename);
+            String text = fileService.readTextFromFile(file);
+            int count = kmpAlgorithm.countOccurrences(text, keyword);
+            log("Result: Keyword '" + keyword + "' appears " + count + " times.");
+        } catch (IOException e) {
+            log("Error reading file: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onFindIndicesButtonClick() {
+        String filename = filenameField.getText();
+        String keyword = keywordField.getText();
+
+        if (filename == null || filename.trim().isEmpty()) {
+            log("Error: Please specify the filename to read from (in the Filename field).");
+            return;
+        }
+        if (keyword == null || keyword.isEmpty()) {
+            log("Error: Keyword cannot be empty.");
+            return;
+        }
+
+        try {
+            File file = new File(filename);
+            String text = fileService.readTextFromFile(file);
+            List<Integer> indices = kmpAlgorithm.findIndices(text, keyword);
+            
+            if (indices.isEmpty()) {
+                log("Result: Keyword '" + keyword + "' not found.");
+            } else {
+                log("Result: Keyword '" + keyword + "' found at indices: " + indices);
+            }
+        } catch (IOException e) {
+            log("Error reading file: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    protected void onExitButtonClick() {
+        log("Exiting system...");
+        Platform.exit();
+    }
+
+    private void log(String message) {
+        resultArea.appendText(message + "\n");
     }
 }
