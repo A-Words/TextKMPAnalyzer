@@ -1,16 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.awords.textkmpanalyzer.TextAnalyzerController">
-  <padding>
-    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-  </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-  <Label fx:id="welcomeText"/>
-  <Button text="Hello!" onAction="#onHelloButtonClick"/>
+<VBox alignment="TOP_CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.awords.textkmpanalyzer.TextAnalyzerController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Text KMP Analyzer">
+        <font>
+            <Font name="System Bold" size="24.0" />
+        </font>
+    </Label>
+   <Separator prefWidth="200.0" />
+
+    <!-- Section 1: File Creation -->
+    <VBox spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 10;">
+        <Label text="1. Create &amp; Save Text File" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Content:" minWidth="60"/>
+            <TextField fx:id="contentField" promptText="Enter text content (no spaces)" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Filename:" minWidth="60"/>
+            <TextField fx:id="filenameField" promptText="e.g., data.txt" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <Button text="Save to File" onAction="#onSaveButtonClick" maxWidth="Infinity"/>
+    </VBox>
+
+    <!-- Section 2 & 3: Analysis -->
+    <VBox spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 10;">
+        <Label text="2 &amp; 3. Keyword Analysis" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Keyword:" minWidth="60"/>
+            <TextField fx:id="keywordField" promptText="Enter keyword" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <HBox spacing="10.0" alignment="CENTER">
+            <Button text="Count Occurrences" onAction="#onCountButtonClick" prefWidth="150"/>
+            <Button text="Find Positions" onAction="#onFindIndicesButtonClick" prefWidth="150"/>
+        </HBox>
+    </VBox>
+
+    <!-- Output Area -->
+    <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+        <Label text="Output / Log:"/>
+        <TextArea fx:id="resultArea" editable="false" wrapText="true" prefHeight="150.0"/>
+    </VBox>
+
+    <!-- Section 4: Exit -->
+    <Button text="Exit System" onAction="#onExitButtonClick" style="-fx-background-color: #ffdddd; -fx-text-fill: red;"/>
+
 </VBox>
