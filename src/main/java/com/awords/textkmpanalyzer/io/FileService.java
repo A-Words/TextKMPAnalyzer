@@ -1,7 +1,7 @@
 package com.awords.textkmpanalyzer.io;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 文件操作服务类
@@ -16,7 +16,19 @@ public class FileService {
      * @throws IOException 如果写入失败
      */
     public void saveTextToFile(File file, String content) throws IOException {
-        // TODO: 实现文件写入逻辑 (使用 BufferedWriter)
+        if (file == null) {
+            throw new IllegalArgumentException("文件不能为空");
+        }
+        if (content == null) {
+            content = "";
+        }
+        
+        // 使用 BufferedWriter 写入文件，指定 UTF-8 编码
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+            writer.write(content);
+            writer.flush();
+        }
     }
 
     /**
@@ -26,7 +38,33 @@ public class FileService {
      * @throws IOException 如果读取失败
      */
     public String readTextFromFile(File file) throws IOException {
-        // TODO: 实现文件读取逻辑 (使用 BufferedReader 或 FileReader)
-        return "";
+        if (file == null) {
+            throw new IllegalArgumentException("文件不能为空");
+        }
+        if (!file.exists()) {
+            throw new FileNotFoundException("文件不存在: " + file.getAbsolutePath());
+        }
+        if (!file.isFile()) {
+            throw new IllegalArgumentException("路径不是有效的文件: " + file.getAbsolutePath());
+        }
+        
+        // 使用 BufferedReader 读取文件，指定 UTF-8 编码
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+                content.append(System.lineSeparator()); // 保留换行符
+            }
+        }
+        
+        // 移除最后一个多余的换行符（如果有内容）
+        if (content.length() > 0) {
+            int separatorLength = System.lineSeparator().length();
+            content.setLength(content.length() - separatorLength);
+        }
+        
+        return content.toString();
     }
 }
