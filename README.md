@@ -1,6 +1,6 @@
 # 文本关键词匹配分析与索引统计系统 (Text KMP Analyzer)
 
-本项目是一个基于 JavaFX 的文本分析工具，旨在演示和应用 KMP (Knuth-Morris-Pratt) 字符串匹配算法。系统允许用户输入或加载文本，指定关键词，并快速统计关键词出现的次数及其在文本中的所有位置索引。
+本项目是一个基于 Java 的文本分析工具，集成了 **控制台 (Console)** 和 **图形界面 (JavaFX GUI)** 两种交互模式。系统旨在演示和应用 KMP (Knuth-Morris-Pratt) 字符串匹配算法，允许用户输入或加载文本，指定关键词，并快速统计关键词出现的次数及其在文本中的所有位置索引。
 
 ## 🛠 技术栈
 
@@ -8,6 +8,21 @@
 - **构建工具**: Maven
 - **UI 框架**: JavaFX 21.0.6
 - **单元测试**: JUnit 5
+
+## ✨ 功能特性
+
+1.  **文本文件创建与保存**
+    *   支持用户输入单行文本内容（不包含空格）。
+    *   支持将输入内容保存到指定文件名的文本文件中。
+2.  **关键词出现次数统计**
+    *   读取指定文本文件。
+    *   使用 KMP 算法统计关键词在文本中出现的总次数。
+3.  **关键词位置索引查询**
+    *   读取指定文本文件。
+    *   使用 KMP 算法查找关键词在文本中每一次出现的起始索引位置（0 为起始下标）。
+4.  **双模式交互**
+    *   **控制台模式 (默认)**: 提供菜单式命令行交互界面。
+    *   **GUI 模式**: 提供直观的图形化操作界面。
 
 ## 📋 环境要求
 
@@ -36,10 +51,28 @@ mvn clean install
 
 ### 3. 运行应用
 
-使用 JavaFX Maven 插件启动应用程序：
+本项目支持两种运行模式，请根据需求选择。
+
+#### 方式 A: 运行控制台模式 (默认)
+
+直接运行程序即可进入命令行菜单交互模式：
 
 ```bash
-mvn javafx:run
+mvn exec:java -Dexec.mainClass="com.awords.textkmpanalyzer.Launcher"
+```
+
+#### 方式 B: 运行图形界面模式 (GUI)
+
+添加 `--gui` 参数启动 JavaFX 图形界面：
+
+**Windows (PowerShell):**
+```powershell
+mvn exec:java "-Dexec.mainClass=com.awords.textkmpanalyzer.Launcher" "-Dexec.args=--gui"
+```
+
+**Linux / macOS (Bash):**
+```bash
+mvn exec:java -Dexec.mainClass="com.awords.textkmpanalyzer.Launcher" -Dexec.args="--gui"
 ```
 
 ## 📂 项目结构
@@ -48,43 +81,32 @@ mvn javafx:run
 src/
 ├── main/
 │   ├── java/com/awords/textkmpanalyzer/
-│   │   ├── algorithm/          # KMP 算法核心实现
-│   │   ├── io/                 # 文件读写服务
+│   │   ├── algorithm/            # KMP 算法核心实现
+│   │   ├── io/                   # 文件读写服务
+│   │   ├── Launcher.java         # 程序启动入口 (处理 CLI/GUI 切换)
+│   │   ├── TextAnalyzerConsole.java # 控制台交互逻辑
 │   │   ├── TextAnalyzerApplication.java  # JavaFX 应用入口
-│   │   └── TextAnalyzerController.java   # 界面控制器
+│   │   └── TextAnalyzerController.java   # GUI 界面控制器
 │   └── resources/com/awords/textkmpanalyzer/
-│       └── text-analyzer-view.fxml       # 界面布局文件
-└── test/                       # 单元测试
+│       └── text-analyzer-view.fxml       # GUI 界面布局文件
+└── test/                         # 单元测试
 ```
 
-## 📝 开发任务分工
+## 📝 开发任务完成情况
 
-本项目分为三个主要模块进行开发，请根据分工完成相应任务。
+### 1. 算法开发 (Algorithm) ✅
+- [x] 实现 `buildNext(String pattern)`
+- [x] 实现 `countOccurrences(String text, String pattern)`
+- [x] 实现 `findIndices(String text, String pattern)`
 
-### 1. 算法开发 (Algorithm)
-**目标**: 实现 KMP 字符串匹配算法的核心逻辑。
-- **文件**: `src/main/java/com/awords/textkmpanalyzer/algorithm/KMPAlgorithm.java`
-- **任务**:
-    - 实现 `buildNext(String pattern)`: 构建 Next 数组。
-    - 实现 `countOccurrences(String text, String pattern)`: 统计关键词出现次数。
-    - 实现 `findIndices(String text, String pattern)`: 返回所有出现位置的索引列表。
-    - **要求**: 必须严格实现 KMP 算法，禁止直接调用 `String` 的 `indexOf` 或 `contains` 方法。
+### 2. 文件 IO 开发 (File I/O) ✅
+- [x] 实现 `saveTextToFile(File file, String content)`
+- [x] 实现 `readTextFromFile(File file)`
 
-### 2. 文件 IO 开发 (File I/O)
-**目标**: 实现文本文件的读取与保存功能。
-- **文件**: `src/main/java/com/awords/textkmpanalyzer/io/FileService.java`
-- **任务**:
-    - 实现 `saveTextToFile(File file, String content)`: 将界面输入的文本保存到本地文件。
-    - 实现 `readTextFromFile(File file)`: 从本地文件读取文本内容到界面。
-
-### 3. 界面开发 (UI/UX)
-**目标**: 实现 JavaFX 界面交互与逻辑绑定。
-- **文件**: 
-    - `src/main/java/com/awords/textkmpanalyzer/TextAnalyzerController.java`
-    - `src/main/resources/com/awords/textkmpanalyzer/text-analyzer-view.fxml`
-- **任务**:
-    - **界面设计**: 完善 `FXML`，包含文本输入区、关键词输入框、"保存"按钮、"搜索"按钮及结果显示区。
-    - **逻辑控制**: 在 `Controller` 中处理按钮点击事件，协调 `FileService` 进行文件操作，调用 `KMPAlgorithm` 进行计算，并更新 UI 结果。
+### 3. 界面开发 (UI/UX) ✅
+- [x] **GUI**: 完成 JavaFX 界面设计与控制器逻辑。
+- [x] **Console**: 完成命令行菜单设计与交互逻辑。
+- [x] **Launcher**: 实现启动参数解析与模式切换。
 
 ## 🤝 贡献指南
 
