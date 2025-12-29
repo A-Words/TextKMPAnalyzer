@@ -1,18 +1,16 @@
 package com.awords.textkmpanalyzer;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class TextAnalyzerConsoleTest {
 
