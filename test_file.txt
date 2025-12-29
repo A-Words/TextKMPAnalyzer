@@ -1,0 +1,4 @@
+DogCatDogFishDogBird
+This is a test document for searching.
+Dog appears multiple times in this text.
+Dog Dog Dog
