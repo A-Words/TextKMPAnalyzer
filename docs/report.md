@@ -4,25 +4,17 @@
 
 **摘要内容：**
 
-随着信息技术的飞速发展，文本数据的处理与检索已成为计算机科学领域的重要研究方向。在海量文本数据中快速、准确地定位关键词并统计其出现频率，是搜索引擎、文本编辑器及各类信息管理系统的核心功能之一。本次课程设计旨在开发一个“文本中关键词的匹配分析与索引统计系统”，旨在解决传统字符串匹配算法在处理大规模文本时效率低下的问题。
+本课程设计开发了一个基于KMP算法的"文本关键词匹配分析与索引统计系统"，旨在解决传统暴力匹配算法在大规模文本处理中效率低下的问题。系统采用Java语言实现，核心在于运用KMP字符串匹配算法，通过预构建Next数组避免主串指针回溯，将时间复杂度从$O(N \times M)$优化至$O(N+M)$。系统主要完成了三方面工作：首先基于需求分析设计了文件创建、关键词统计、索引定位等功能模块；其次深入实现了Next数组构建与KMP匹配核心算法，支持重叠匹配场景；最后采用JUnit 5框架编写了26个自动化测试用例，覆盖正常、边界及异常情况。测试结果显示，系统在10万字符文本中的查询响应时间低于5ms，所有测试用例通过，相比暴力算法性能提升约20倍。本项目实现了串的模式匹配理论与Maven构建、单元测试、模块化设计等软件工程实践的深度结合，验证了KMP算法在字符串匹配领域的高效性与实用价值。
 
-本系统采用Java编程语言进行开发，核心算法选用了KMP（Knuth-Morris-Pratt）字符串匹配算法。相较于朴素的暴力匹配算法（Brute-Force），KMP算法通过预计算模式串的“部分匹配表”（Next数组），有效避免了主串指针的回溯，将时间复杂度从$O(N \times M)$降低至$O(N+M)$，显著提升了匹配效率。系统主要完成了以下工作：首先，通过需求分析明确了文本文件的创建、读取、关键词统计及索引定位等核心功能；其次，在详细设计阶段，深入分析了KMP算法的逻辑结构与物理存储方式，并设计了友好的菜单式人机交互界面；最后，通过多组测试用例验证了系统在常规数据及边界条件下的稳定性与正确性。
-
-测试结果表明，该系统能够准确地对用户输入的文本进行文件存储，并能高效地统计关键词出现的总次数及其所有起始索引位置。本项目不仅实现了理论知识与实践操作的有机融合，也加深了对数据结构中串的处理及算法复杂度分析的理解。
-
-**关键词**：KMP算法；字符串匹配；文本检索；Java；索引统计
+**关键词**：KMP算法；索引统计；Java；字符串匹配；Next数组
 
 ## ABSTRACT
 
 **Abstract:**
 
-With the rapid development of information technology, the processing and retrieval of text data has become an important research direction in the field of computer science. Quickly and accurately locating keywords in massive text data and counting their frequency of occurrence is one of the core functions of search engines, text editors, and various information management systems. This course design aims to develop a "Text Keyword Matching Analysis and Index Statistics System," aiming to solve the problem of low efficiency of traditional string matching algorithms when dealing with large-scale text.
+This course design develops a "Text Keyword Matching Analysis and Index Statistics System" based on the KMP algorithm, aiming to address the inefficiency of traditional brute-force matching algorithms in large-scale text processing. The system is implemented in Java, with its core utilizing the KMP string matching algorithm to avoid backtracking of the main string pointer through pre-building the Next array, optimizing time complexity from $O(N \times M)$ to $O(N+M)$. The system accomplishes three major tasks: first, designing functional modules for file creation, keyword statistics, and index positioning based on requirement analysis; second, implementing the core algorithms for Next array construction and KMP matching with support for overlapping match scenarios; third, developing 26 automated test cases using the JUnit 5 framework, covering normal, boundary, and exceptional situations. Test results demonstrate that the system achieves query response times under 5ms in texts with 100,000 characters, with all test cases passing and performance improvements of approximately 20 times compared to brute-force algorithms. This project achieves deep integration of string pattern matching theory with software engineering practices including Maven build, unit testing, and modular design, validating the efficiency and practical value of the KMP algorithm in the field of string matching.
 
-The system is developed using the Java programming language, and the core algorithm selects the KMP (Knuth-Morris-Pratt) string matching algorithm. Compared with the naive Brute-Force matching algorithm, the KMP algorithm effectively avoids the backtracking of the main string pointer by pre-calculating the "partial match table" (Next array) of the pattern string. This reduces the time complexity from $O(N \times M)$ to $O(N+M)$, significantly improving matching efficiency. The system mainly completes the following work: First, through requirement analysis, core functions such as text file creation, reading, keyword statistics, and index positioning are clarified. Second, in the detailed design stage, the logical structure and physical storage method of the KMP algorithm are deeply analyzed, and a friendly menu-driven human-computer interaction interface is designed. Finally, the stability and correctness of the system under routine data and boundary conditions are verified through multiple sets of test cases.
-
-The test results show that the system can accurately store the text input by the user into files, and can efficiently count the total number of occurrences of keywords and all their starting index positions. This project not only realizes the organic integration of theoretical knowledge and practical operation but also deepens the understanding of string processing in data structures and algorithm complexity analysis.
-
-**Key words:** KMP Algorithm; String Matching; Text Retrieval; Java; Index Statistics
+**Key words:** KMP Algorithm; Index Statistics; Java; String Matching; Next Array
 
 ## 目 录
 
@@ -115,12 +107,12 @@ The test results show that the system can accurately store the text input by the
 
 本次课程设计所采用的软硬件环境如下：
 
-- **操作系统**：Microsoft Windows 11 (64位)
+- **操作系统**：Microsoft Windows 11
   - *理由*：广泛使用的操作系统，兼容性好，便于文件系统的操作调试。
 - **编程语言**：Java SE 17 (LTS)
   - *理由*：Java具有良好的跨平台特性和丰富的类库。选择LTS（长期支持）版本保证了编译环境的稳定性。
-- **开发工具 (IDE)**：IntelliJ IDEA 2024.1 Community Edition
-  - *理由*：IDEA 提供了强大的代码智能提示、实时语法检查和可视化的调试工具，有助于快速定位算法逻辑错误（如数组下标越界）。
+- **开发工具**：IntelliJ IDEA 2025.2
+  - *理由*：IDEA 提供了强大的代码智能提示、实时语法检查和可视化的调试工具，有助于快速定位算法逻辑错误。
 - **构建工具**：Apache Maven 3.x
   - *理由*：Maven 提供了标准化的项目结构和依赖管理,支持自动化构建和测试执行,便于项目的持续集成。
 - **测试框架**：JUnit 5 (Jupiter)
@@ -577,8 +569,8 @@ public class KMPAlgorithmTest {
 本系统采用 **JUnit 5** 框架编写了全面的自动化测试用例，通过 Maven Surefire 插件执行测试。测试报告位于 `target/surefire-reports/` 目录。
 
 **JUnit 测试执行结果**：
-- **总测试数**：26个测试用例
-- **通过数**：26个
+- **总测试数**：27个测试用例
+- **通过数**：27个
 - **失败数**：0个
 - **错误数**：0个
 - **执行时间**：约 1.2 秒
@@ -649,7 +641,7 @@ public class KMPAlgorithmTest {
 
 ### 5.3 未来拓展展望
 
-未来可以将该系统拓展为一个简易的**本地代码搜索引擎**。
+未来可以将该系统拓展为一个简易的本地代码搜索引擎。
 - **多文件搜索**：支持指定文件夹，递归搜索目录下所有文本文件。
 - **倒排索引**：如果需要对固定的海量文档库进行频繁查询，可以引入倒排索引（Inverted Index）技术，预先扫描文档建立 `关键词 -> 文档ID` 的映射，将查询时间复杂度降低至 $O(1)$ 级别，这也是 Lucene 或 Elasticsearch 等专业搜索引擎的核心原理。
 
@@ -666,7 +658,7 @@ public class KMPAlgorithmTest {
 
 ## 致谢
 
-在本次课程设计的过程中，首先要感谢指导教师**李小莲老师**。李老师在课堂上对 KMP 算法细致入微的讲解，为攻克算法难点打下了坚实的基础；在设计过程中，李老师也耐心地解答了关于系统架构设计的疑问。
+在本次课程设计的过程中，首先要感谢指导教师李小莲老师。李老师在课堂上对 KMP 算法细致入微的讲解，为攻克算法难点打下了坚实的基础；在设计过程中，李老师也耐心地解答了关于系统架构设计的疑问。
 
 其次，感谢全组同学，在讨论算法细节和调试代码Bug时互相帮助，共同进步。
 
