@@ -1,5 +1,6 @@
 package com.awords.textkmpanalyzer.algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +15,27 @@ public class KMPAlgorithm {
      * @return next数组
      */
     private int[] buildNext(String pattern) {
-        // TODO: 实现Next数组构建逻辑
-        return new int[0];
+        int m = pattern.length();
+        int[] next = new int[m + 1];
+        next[0] = -1;
+        int k = -1;
+        int j = 0;
+        while (j < m) {
+            if (k == -1 || pattern.charAt(j) == pattern.charAt(k)) {
+                j++;
+                k++;
+                // 优化：如果 pattern[j] == pattern[k]，则 next[j] = next[k]
+                // 注意：当 j == m 时，不能访问 pattern.charAt(j)
+                if (j < m && pattern.charAt(j) == pattern.charAt(k)) {
+                    next[j] = next[k];
+                } else {
+                    next[j] = k;
+                }
+            } else {
+                k = next[k];
+            }
+        }
+        return next;
     }
 
     /**
@@ -25,8 +45,10 @@ public class KMPAlgorithm {
      * @return 出现次数
      */
     public int countOccurrences(String text, String pattern) {
-        // TODO: 使用KMP算法统计出现次数
-        return 0;
+        if (text == null || pattern == null || pattern.isEmpty() || text.length() < pattern.length()) {
+            return 0;
+        }
+        return findIndices(text, pattern).size();
     }
 
     /**
@@ -36,7 +58,28 @@ public class KMPAlgorithm {
      * @return 索引列表
      */
     public List<Integer> findIndices(String text, String pattern) {
-        // TODO: 使用KMP算法查找所有出现位置
-        return null;
+        List<Integer> indices = new ArrayList<>();
+        if (text == null || pattern == null || pattern.isEmpty() || text.length() < pattern.length()) {
+            return indices;
+        }
+        
+        int[] next = buildNext(pattern);
+        int i = 0; // text index
+        int j = 0; // pattern index
+        
+        while (i < text.length()) {
+            if (j == -1 || text.charAt(i) == pattern.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                j = next[j];
+            }
+            
+            if (j == pattern.length()) {
+                indices.add(i - j);
+                j = next[j];
+            }
+        }
+        return indices;
     }
 }
