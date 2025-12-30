@@ -59,11 +59,11 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 在当今大数据时代，非结构化文本数据呈现爆炸式增长。无论是在Web搜索引擎中检索网页，还是在本地IDE（集成开发环境）中查找代码片段，亦或是生物信息学中DNA序列的比对，字符串匹配（String Matching）都是最底层且最核心的操作之一。
 
 **背景分析：**
-在《数据结构与算法》课程中，串（String）是一种特殊的线性表，其数据元素仅由字符组成。实际应用中，用户经常需要在一个较长的文本串（主串）中查找一个较短的模式串（子串）的位置。最直观的暴力匹配算法（Brute-Force Algorithm）虽然实现简单，但在最坏情况下的效率极低，无法满足大规模文本处理的实时性要求。例如，当主串和模式串均为“aaaa...b”的形式时，暴力算法会进行大量的无效回溯。
+在《数据结构与算法》课程中，串（String）是一种特殊的线性表，其数据元素仅由字符组成。实际应用中，用户经常需要在一个较长的文本串（主串）中查找一个较短的模式串（子串）的位置。最直观的暴力匹配算法（Brute-Force Algorithm）虽然实现简单，但在最坏情况下的效率极低，无法满足大规模文本处理的实时性要求<sup>[[1]](#ref1)</sup>。例如，当主串和模式串均为"aaaa...b"的形式时，暴力算法会进行大量的无效回溯<sup>[[2]](#ref2)</sup>。
 
 **选题意义：**
 本课题“文本中关键词的匹配分析与索引统计系统”的选择具有重要的理论意义和实用价值。
-1.  **理论价值**：通过实现KMP算法，能够深入理解D.E.Knuth、J.H.Morris和V.R.Pratt三位科学家如何利用已经部分匹配的信息来加速搜索过程，深刻体会“空间换时间”的算法设计思想。
+1.  **理论价值**：通过实现KMP算法，能够深入理解D.E.Knuth、J.H.Morris和V.R.Pratt三位科学家如何利用已经部分匹配的信息来加速搜索过程，深刻体会“空间换时间”的算法设计思想<sup>[[3]](#ref3)</sup>。
 2.  **应用价值**：该系统模拟了现实生活中“查找与统计”的业务场景。通过文件I/O操作实现数据的持久化存储，结合高效的查找算法，可以为简易的文本分析工具提供技术原型。此外，通过本项目，能够提升对Java IO流处理、异常处理及模块化程序设计的实践能力。
 
 ### 1.2 功能需求分析
@@ -95,7 +95,7 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 为了确保系统在实际使用中的流畅性和稳定性，设定以下性能指标：
 
 1.  **响应时间**：对于长度在 100,000 字符以内的文本文件，关键词查找与统计的响应时间应小于 1 秒。
-2.  **算法效率**：必须摒弃Java内置的 `String.indexOf()` 或 `String.contains()` 方法，强制使用KMP算法实现。算法的时间复杂度应控制在 $O(N+M)$ 级别（N为文本长度，M为关键词长度）。
+2.  **算法效率**：必须摒弃Java内置的 `String.indexOf()` 或 `String.contains()` 方法，强制使用KMP算法实现。算法的时间复杂度应控制在 $O(N+M)$ 级别（N为文本长度，M为关键词长度）<sup>[[4]](#ref4)</sup>。
 3.  **鲁棒性**：系统应能处理空文件、空关键词、关键词长度大于文本长度等边界情况，不会抛出未捕获的异常（如 `NullPointerException` 或 `IndexOutOfBoundsException`）。
 4.  **空间效率**：读取文件时应考虑内存占用，虽然本课设数据规模较小，但代码设计应具备处理流式数据的潜力。
 
@@ -112,7 +112,7 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 - **构建工具**：Apache Maven 3.x
   - *理由*：Maven 提供了标准化的项目结构和依赖管理,支持自动化构建和测试执行,便于项目的持续集成。
 - **测试框架**：JUnit 5 (Jupiter)
-  - *理由*：JUnit 是Java生态中最流行的单元测试框架,提供了丰富的断言API和测试生命周期管理,能够确保代码质量并支持测试驱动开发(TDD)。
+    - *理由*：JUnit 是Java生态中最流行的单元测试框架,提供了丰富的断言API和测试生命周期管理,能够确保代码质量并支持测试驱动开发(TDD)<sup>[[5]](#ref5)</sup>。
 - **辅助工具**：
   - **Git**：用于本地代码的版本控制。
   - **Visio / ProcessOn**：用于绘制算法流程图和系统功能结构图。
@@ -131,7 +131,7 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 
 ### 2.2 功能模块划分
 
-为了降低系统的耦合度，采用“分治法”将系统划分为以下四个核心模块。各模块职责明确，通过参数传递进行数据交互。
+为了降低系统的耦合度，采用“分治法”将系统划分为以下四个核心模块。各模块职责明确，通过参数传递进行数据交互<sup>[[6]](#ref6)</sup>。
 
 1.  **文件操作模块 (FileHandler Module)**
     *   **职责**：负责与底层文件系统交互。
@@ -156,8 +156,7 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 
 ### 2.3 总体设计方案概述
 
-本系统采用**MVC（Model-View-Controller）**的简化分层架构思想进行设计：
-
+本系统采用**MVC（Model-View-Controller）**的简化分层架构思想进行设计<sup>[[7]](#ref7)</sup>
 *   **数据层（Model）**：主要由 Java 的 `String` 类和整型数组 `int[]`（用于存储Next值）构成。数据来源于本地文件系统。
 *   **逻辑层（Controller/Service）**：核心是 KMP 算法。在技术选型上，摒弃了简单的 `BF`（Brute-Force）算法。尽管 BF 算法在一般情况下（字符分布随机）表现尚可，但在极端情况下（如主串 `AAAA...B`，模式串 `AAAB`）会退化为 $O(N \times M)$。而 KMP 算法利用 Next 数组记录已匹配前缀的信息，主串指针 `i` 从不回溯，确保了算法在最坏情况下的线性时间复杂度。
 *   **表现层（View）**：使用 `System.out` 和 `Scanner` 实现字符界面的交互。
@@ -178,7 +177,7 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 
 1.  **串的存储**：
     *   选择 **Java String 类**。
-    *   **理由**：Java 的 String 底层（JDK 9+使用 byte[], JDK 8及以前使用 char[]）提供了高效的字符存储。虽然 String 是不可变的（Immutable），但本系统主要进行“读取”和“匹配”操作，极少涉及原地修改，因此 String 的安全性与便捷性优于 `StringBuilder` 或原始字符数组。
+    *   **理由**：Java 的 String 底层（JDK 9+使用 byte[], JDK 8及以前使用 char[]）提供了高效的字符存储<sup>[[8]](#ref8)</sup>。虽然 String 是不可变的（Immutable），但本系统主要进行“读取”和“匹配”操作，极少涉及原地修改，因此 String 的安全性与便捷性优于 `StringBuilder` 或原始字符数组。
 2.  **KMP辅助结构**：
     *   选择 **整型数组 (int[] next)**。
     *   **理由**：KMP算法需要计算模式串中每个位置的最长相等前后缀长度。由于模式串长度通常有限，使用定长整型数组存储 Next 值最为高效，且支持随机访问。
@@ -263,7 +262,7 @@ KMP算法是由D.E.Knuth、J.H.Morris和V.R.Pratt提出的改进型字符串匹�
 
 ### 4.1 核心代码实现
 
-本系统基于 Java 语言开发，以下截取了系统中最为关键的 **KMP 算法工具类**与**文件操作类**的核心代码片段。代码遵循 Google Java 编程规范，包含详细注释。
+本系统基于 Java 语言开发，以下截取了系统中最为关键的 **KMP 算法工具类**与**文件操作类**的核心代码片段。代码遵循 Google Java 编程规范，包含详细注释<sup>[[9]](#ref9)</sup>。
 
 **代码片段 1：KMP 算法实现类 (KMPAlgorithm.java)**
 
@@ -535,7 +534,7 @@ public class KMPAlgorithmTest {
 
 #### 4.3.1 测试结果记录
 
-本系统采用 **JUnit 5** 框架编写了全面的自动化测试用例，通过 Maven Surefire 插件执行测试。测试报告位于 `target/surefire-reports/` 目录。
+本系统采用 **JUnit 5** 框架编写了全面的自动化测试用例，通过 Maven Surefire 插件执行测试<sup>[[10]](#ref10)</sup>。测试报告位于 `target/surefire-reports/` 目录。
 
 **JUnit 测试执行结果**：
 - **总测试数**：27个测试用例
@@ -614,16 +613,27 @@ public class KMPAlgorithmTest {
 - **多文件搜索**：支持指定文件夹，递归搜索目录下所有文本文件。
 - **倒排索引**：如果需要对固定的海量文档库进行频繁查询，可以引入倒排索引（Inverted Index）技术，预先扫描文档建立 `关键词 -> 文档ID` 的映射，将查询时间复杂度降低至 $O(1)$ 级别，这也是 Lucene 或 Elasticsearch 等专业搜索引擎的核心原理。
 
----
-
 ## 参考文献
 
-[1] 李小莲,杨泽.数据结构与算法——Java 语言描述[M].清华大学出版社,2024.
-[2] 李春葆等.数据结构教程（Java 语言描述）学习与上机实验指导[M].清华大学出版社,2020.07.
-[3] Cormen T H, Leiserson C E, Rivest R L, et al. Introduction to Algorithms[M]. MIT press, 2022.
-[4] Oracle. Java SE 17 Documentation [EB/OL]. https://docs.oracle.com/en/java/javase/17/, 2025.
+<a id="ref1">[1]</a> 张宇乐, 魏佳. 基于数学视角的KMP字符串匹配算法原理分析与研究[J]. 电脑知识与技术, 2025, 21(31):57-60. DOI:10.14004/j.cnki.ckt.2025.1578.
 
----
+<a id="ref2">[2]</a> JIANG P, CAI X. A survey of text-matching techniques[J]. Information, 2024, 15(6): 332. DOI:10.3390/info15060332
+
+<a id="ref3">[3]</a> KNUTH D E, MORRIS JR J H, PRATT V R. Fast pattern matching in strings[J]. SIAM Journal on Computing, 1977, 6(2): 323-350. DOI:10.1137/0206024
+
+<a id="ref4">[4]</a> CORNEJO-APARICIO V, CUARITE-SILVA C, BENAVENTE-MAYTA A, et al. A Hybrid Length-Based Pattern Matching Algorithm for Text Searching[J]. International Journal of Advanced Computer Science & Applications, 2025, 16(4). DOI:10.14569/IJACSA.2025.0160407.
+
+<a id="ref5">[5]</a> 孙庚, 贺平. 基于JUnit5软件单元测试实践教学[J]. 计算机教育, 2023,(08):189-194. DOI:10.16512/j.cnki.jsjjy.2023.08.042.
+
+<a id="ref6">[6]</a> 夏明忠,夏以轩,李兵元.软件模块化设计和模块化管理[J].中国信息界,2012,(11):56-59.
+
+<a id="ref7">[7]</a> 张文杰, 纪庆楠, 谢浩杰, 等. 基于 MVC 架构模式的大学校园社团信息发布组织平台设计[J]. Design, 2023, 8: 3456. DOI: 10.12677/Design.2023.84426.
+
+<a id="ref8">[8]</a> Artho C, Parízek P, Qu D, et al. JPF: From 2003 to 2023[C]//International Conference on Tools and Algorithms for the Construction and Analysis of Systems. Cham: Springer Nature Switzerland, 2024: 3-22. DOI:10.1007/978-3-031-57249-4_1
+
+<a id="ref9">[9]</a> Kupari A, Giacaman N, Terragni V. Adoption and Evolution of Code Style and Best Programming Practices in Open-Source Projects[R]. Technical report, valerio-terragni. github. io, 2025.
+
+<a id="ref10">[10]</a> 黄敏珍.CMMI、敏捷开发和DevOps在项目管理实践中的应用[J].项目管理技术,2020,18(09):91-95.
 
 ## 致谢
 
