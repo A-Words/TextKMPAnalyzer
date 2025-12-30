@@ -2,15 +2,11 @@
 
 ## 摘 要
 
-**摘要内容：**
-
 本课程设计开发了一个基于KMP算法的"文本关键词匹配分析与索引统计系统"，旨在解决传统暴力匹配算法在大规模文本处理中效率低下的问题。系统采用Java语言实现，核心在于运用KMP字符串匹配算法，通过预构建Next数组避免主串指针回溯，将时间复杂度从$O(N \times M)$优化至$O(N+M)$。系统主要完成了三方面工作：首先基于需求分析设计了文件创建、关键词统计、索引定位等功能模块；其次深入实现了Next数组构建与KMP匹配核心算法，支持重叠匹配场景；最后采用JUnit 5框架编写了26个自动化测试用例，覆盖正常、边界及异常情况。测试结果显示，系统在10万字符文本中的查询响应时间低于5ms，所有测试用例通过，相比暴力算法性能提升约20倍。本项目实现了串的模式匹配理论与Maven构建、单元测试、模块化设计等软件工程实践的深度结合，验证了KMP算法在字符串匹配领域的高效性与实用价值。
 
 **关键词**：KMP算法；索引统计；Java；字符串匹配；Next数组
 
 ## ABSTRACT
-
-**Abstract:**
 
 This course design develops a "Text Keyword Matching Analysis and Index Statistics System" based on the KMP algorithm, aiming to address the inefficiency of traditional brute-force matching algorithms in large-scale text processing. The system is implemented in Java, with its core utilizing the KMP string matching algorithm to avoid backtracking of the main string pointer through pre-building the Next array, optimizing time complexity from $O(N \times M)$ to $O(N+M)$. The system accomplishes three major tasks: first, designing functional modules for file creation, keyword statistics, and index positioning based on requirement analysis; second, implementing the core algorithms for Next array construction and KMP matching with support for overlapping match scenarios; third, developing 26 automated test cases using the JUnit 5 framework, covering normal, boundary, and exceptional situations. Test results demonstrate that the system achieves query response times under 5ms in texts with 100,000 characters, with all test cases passing and performance improvements of approximately 20 times compared to brute-force algorithms. This project achieves deep integration of string pattern matching theory with software engineering practices including Maven build, unit testing, and modular design, validating the efficiency and practical value of the KMP algorithm in the field of string matching.
 
@@ -549,9 +545,9 @@ public class KMPAlgorithmTest {
 - **执行时间**：约 1.2 秒
 
 主要测试类及其覆盖范围：
-1. `KMPAlgorithmTest`：8个测试用例，覆盖 Next 数组构建与各类匹配场景
-2. `FileServiceTest`：4个测试用例，验证文件读写与异常处理
-3. `TextAnalyzerConsoleTest`：3个测试用例，检查主控流程的健壮性
+1. `KMPAlgorithmTest`：9个测试用例，覆盖 Next 数组构建与各类匹配场景
+2. `FileServiceTest`：15个测试用例，验证文件读写与异常处理
+3. `TextAnalyzerConsoleTest`：2个测试用例，检查主控流程的健壮性
 
 针对上述设计的关键用例，实际输出结果如下：
 
