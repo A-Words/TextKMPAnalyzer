@@ -156,10 +156,10 @@ This course design develops a "Text Keyword Matching Analysis and Index Statisti
 
 ### 2.3 总体设计方案概述
 
-本系统采用**MVC（Model-View-Controller）**的简化分层架构思想进行设计<sup>[[7]](#ref7)</sup>
-*   **数据层（Model）**：主要由 Java 的 `String` 类和整型数组 `int[]`（用于存储Next值）构成。数据来源于本地文件系统。
-*   **逻辑层（Controller/Service）**：核心是 KMP 算法。在技术选型上，摒弃了简单的 `BF`（Brute-Force）算法。尽管 BF 算法在一般情况下（字符分布随机）表现尚可，但在极端情况下（如主串 `AAAA...B`，模式串 `AAAB`）会退化为 $O(N \times M)$。而 KMP 算法利用 Next 数组记录已匹配前缀的信息，主串指针 `i` 从不回溯，确保了算法在最坏情况下的线性时间复杂度。
-*   **表现层（View）**：使用 `System.out` 和 `Scanner` 实现字符界面的交互。
+本系统采用**模块化分层设计（Modular Design）**思想，遵循“关注点分离”原则，将数据存储、算法实现与用户交互分离，以降低各模块间的耦合度，提高代码的可维护性<sup>[[7]](#ref7)</sup>。系统主要分为以下三个逻辑层次：
+*   **数据组织与存储层**：该层负责数据的定义与内存管理。主要利用 Java 的 `String` 类存储从文件中读取的文本内容（主串）和用户输入的关键词（模式串）；使用整型数组 `int[]` 存储 KMP 算法所需的 Next 数组；使用动态数组 `ArrayList<Integer>` 存储匹配到的所有位置索引，以解决匹配次数不确定的问题。数据来源于本地文件系统，通过 I/O 流加载至内存。
+*   **核心算法逻辑层**：该层是系统的核心，封装了字符串匹配的具体实现逻辑。在技术选型上，摒弃了简单的 BF（Brute-Force）暴力匹配算法。尽管 BF 算法在一般情况下表现尚可，但在极端情况下（如主串 AAAA...B，模式串 AAAB）会退化为 $O(N \times M)$。本系统采用 **KMP 算法**，利用 Next 数组记录已匹配前缀的信息，保证主串指针 $i$ 不回溯，从而将最坏情况下的时间复杂度优化至 $O(N + M)$，确保了高效的匹配性能。
+*   **用户交互与控制层**：该层负责系统的流程控制与人机交互。使用 `System.out` 向控制台输出菜单选项、提示信息及匹配结果；使用 `Scanner` 捕获用户的键盘输入，并进行合法性校验（如防止非数字输入导致的异常）。该层调用算法层的接口执行搜索任务，并将底层返回的数据格式化展示给用户，实现了界面显示与内部逻辑的解耦。
 
 **技术选型依据**：
 *   **开发语言**：Java。利用其强大的 `java.io` 包处理文件流，以及自动内存管理机制。
@@ -221,13 +221,17 @@ KMP算法是由D.E.Knuth、J.H.Morris和V.R.Pratt提出的改进型字符串匹�
 
 **流程图 1：Next数组构建 (getNext方法)**
 
-![Next数组构建流程图](figures/kmp_next_flowchart.png)
-<center>图 3-1 Next数组构建流程图</center>
+<div align="center">
+  <img src="figures/kmp_next_flowchart.png" alt="Next数组构建流程图" />
+  <div>图 3.1 Next数组构建流程图</div>
+</div>
 
 **流程图 2：KMP匹配主流程 (kmpSearch方法)**
 
-![KMP匹配主流程图](figures/kmp_search_flowchart.png)
-<center>图 3-2 KMP匹配主流程图</center>
+<div align="center">
+  <img src="figures/kmp_search_flowchart.png" alt="KMP匹配主流程图" />
+  <div>图 3.2 KMP匹配主流程图</div>
+</div>
 
 #### 3.2.3 关键模块详细实现思路
 
@@ -545,8 +549,25 @@ public class KMPAlgorithmTest {
 
 主要测试类及其覆盖范围：
 1. `KMPAlgorithmTest`：9个测试用例，覆盖 Next 数组构建与各类匹配场景
+
+   <div align="center">
+     <img src="figures/kmp_algorithm_test.png" alt="KMPAlgorithmTest测试图" />
+     <div>图 4.1 KMPAlgorithmTest测试图</div>
+   </div>
+
 2. `FileServiceTest`：15个测试用例，验证文件读写与异常处理
+
+   <div align="center">
+     <img src="figures/file_service_test.png" alt="FileServiceTest测试图" />
+     <div>图 4.2 FileServiceTest测试图</div>
+   </div>
+
 3. `TextAnalyzerConsoleTest`：2个测试用例，检查主控流程的健壮性
+
+   <div align="center">
+     <img src="figures/text_analyzer_console_test.png" alt="TextAnalyzerConsoleTest测试图" />
+     <div>图 4.3 TextAnalyzerConsoleTest测试图</div>
+   </div>
 
 针对上述设计的关键用例，实际输出结果如下：
 
@@ -573,6 +594,11 @@ public class KMPAlgorithmTest {
 - **预期时间**：基于 $O(N+M)$，操作应在瞬间完成。
 - **实测结果**：查询耗时约 2ms - 5ms（不含文件读取时间）。
 - **对比**：相比于手动模拟的暴力匹配（最坏情况约 100ms+），性能符合预期，满足“响应时间 < 1s”的需求。
+
+<div align="center">
+  <img src="figures/kmp_performance_test.png" alt="性能测试图" />
+  <div>图 4-4 性能测试图</div>
+</div>
 
 #### 4.3.3 问题与修复
 
@@ -617,23 +643,23 @@ public class KMPAlgorithmTest {
 
 <a id="ref1">[1]</a> 张宇乐, 魏佳. 基于数学视角的KMP字符串匹配算法原理分析与研究[J]. 电脑知识与技术, 2025, 21(31):57-60. DOI:10.14004/j.cnki.ckt.2025.1578.
 
-<a id="ref2">[2]</a> JIANG P, CAI X. A survey of text-matching techniques[J]. Information, 2024, 15(6): 332. DOI:10.3390/info15060332
+<a id="ref2">[2]</a> JIANG P, CAI X. A survey of text-matching techniques[J]. Information, 2024, 15(6):332. DOI:10.3390/info15060332.
 
-<a id="ref3">[3]</a> KNUTH D E, MORRIS JR J H, PRATT V R. Fast pattern matching in strings[J]. SIAM Journal on Computing, 1977, 6(2): 323-350. DOI:10.1137/0206024
+<a id="ref3">[3]</a> KNUTH D E, MORRIS JR J H, PRATT V R. Fast pattern matching in strings[J]. SIAM Journal on Computing, 1977, 6(2):323-350. DOI:10.1137/0206024.
 
-<a id="ref4">[4]</a> CORNEJO-APARICIO V, CUARITE-SILVA C, BENAVENTE-MAYTA A, et al. A Hybrid Length-Based Pattern Matching Algorithm for Text Searching[J]. International Journal of Advanced Computer Science & Applications, 2025, 16(4). DOI:10.14569/IJACSA.2025.0160407.
+<a id="ref4">[4]</a> CORNEJO-APARICIO V, CUARITE-SILVA C, BENAVENTE-MAYTA A, et al. A hybrid length-based pattern matching algorithm for text searching[J]. International Journal of Advanced Computer Science & Applications, 2025, 16(4). DOI:10.14569/IJACSA.2025.0160407.
 
-<a id="ref5">[5]</a> 孙庚, 贺平. 基于JUnit5软件单元测试实践教学[J]. 计算机教育, 2023,(08):189-194. DOI:10.16512/j.cnki.jsjjy.2023.08.042.
+<a id="ref5">[5]</a> 孙庚, 贺平. 基于JUnit5软件单元测试实践教学[J]. 计算机教育, 2023(8):189-194. DOI:10.16512/j.cnki.jsjjy.2023.08.042.
 
-<a id="ref6">[6]</a> 夏明忠,夏以轩,李兵元.软件模块化设计和模块化管理[J].中国信息界,2012,(11):56-59.
+<a id="ref6">[6]</a> 夏明忠, 夏以轩, 李兵元. 软件模块化设计和模块化管理[J]. 中国信息界, 2012(11):56-59.
 
-<a id="ref7">[7]</a> 张文杰, 纪庆楠, 谢浩杰, 等. 基于 MVC 架构模式的大学校园社团信息发布组织平台设计[J]. Design, 2023, 8: 3456. DOI: 10.12677/Design.2023.84426.
+<a id="ref7">[7]</a> 王会娥, 王新萍, 薛婷婷, 等. 面向对象中分层模块化设计的运用[J]. 软件, 2011, 32(3):37-39.
 
-<a id="ref8">[8]</a> Artho C, Parízek P, Qu D, et al. JPF: From 2003 to 2023[C]//International Conference on Tools and Algorithms for the Construction and Analysis of Systems. Cham: Springer Nature Switzerland, 2024: 3-22. DOI:10.1007/978-3-031-57249-4_1
+<a id="ref8">[8]</a> Artho C, Parízek P, Qu D, et al. JPF: from 2003 to 2023[C]//International Conference on Tools and Algorithms for the Construction and Analysis of Systems. Cham: Springer Nature Switzerland, 2024:3-22. DOI:10.1007/978-3-031-57249-4_1.
 
-<a id="ref9">[9]</a> Kupari A, Giacaman N, Terragni V. Adoption and Evolution of Code Style and Best Programming Practices in Open-Source Projects[R]. Technical report, valerio-terragni. github. io, 2025.
+<a id="ref9">[9]</a> Kupari A, Giacaman N, Terragni V. Adoption and evolution of code style and best programming practices in open-source projects[R]. Technical report, valerio-terragni.github.io, 2025.
 
-<a id="ref10">[10]</a> 黄敏珍.CMMI、敏捷开发和DevOps在项目管理实践中的应用[J].项目管理技术,2020,18(09):91-95.
+<a id="ref10">[10]</a> 黄敏珍. CMMI、敏捷开发和DevOps在项目管理实践中的应用[J]. 项目管理技术, 2020, 18(9):91-95.
 
 ## 致谢
 
